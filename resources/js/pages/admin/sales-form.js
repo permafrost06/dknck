@@ -18,6 +18,7 @@ async function fetchInfo(id) {
         infoEL.innerHTML = '';
         return;
     }
+    id = parseInt(id.replace(/([^0-9]+)/, ''));
     rmClasses(infoEL, 'text-skin-success text-skin-danger');
     infoEL.innerHTML = 'Loading...';
     if (itemFetchSignal) {

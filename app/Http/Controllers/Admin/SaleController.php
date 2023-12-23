@@ -33,10 +33,12 @@ class SaleController extends Controller
 
 
         $data = $request->validate([
-            'item_id' => 'required|numeric',
+            'item_id' => 'required|string',
             'quantity' => 'required|numeric|min:0',
             'sale_price' => 'required|numeric|min:0',
         ]);
+
+        $data['item_id'] = preg_replace('/([^0-9]+)/', '', $data['item_id']);
 
         $item = Item::find($data['item_id']);
 

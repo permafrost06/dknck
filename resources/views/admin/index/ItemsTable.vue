@@ -61,6 +61,8 @@ const onCompleted = (success, res) => {
     }
 }
 
+const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`
+
 </script>
 
 <template>
@@ -76,7 +78,7 @@ const onCompleted = (success, res) => {
                         }"
                         @click="() => sortBy('id')"
                     >
-                        Sln
+                        ID
                     </th>
                     
                     <th
@@ -160,7 +162,7 @@ const onCompleted = (success, res) => {
                     :key="item.id"
                 >
                     <td class="px-6 py-4 font-medium whitespace-nowrap">
-                        {{ item.id }}
+                        {{ toIdFormat(item.id) }}
                     </td>
                     <th
                         scope="row"
