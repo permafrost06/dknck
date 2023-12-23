@@ -44,6 +44,47 @@ class ItemController extends Controller
         }
     }
 
+    
+    public function api(Request $req)
+    {
+        $start = (int) $req->get('start', 0);
+        $limit = (int) $req->get('limit', 10);
+        $order_by = match ($req->get('order_by')) {
+            'name' => 'name',
+            'date' => 'date',
+            'vendor' => 'vendor',
+            'price' => 'unit_price_buying',
+            'quantity' => 'quantity',
+            'sold' => 'sold',
+            'profit' => 'profit',
+            default => 'id'
+        };
+
+        $order = 'DESC';
+        if ($req->get('order') === 'asc') {
+            $order = 'asc';
+        }
+
+        $search = $req->get('search', '');
+
+        $q = Item::query();
+
+
+        if ($search) {
+            $search = '%' . $search . '%';
+            $q->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', $search);
+                $q->orWhere('vendor', 'LIKE', $search);
+            });
+        }
+
+        return [
+            'count' => $q->count(),
+            'data' => $q->orderBy($order_by, $order)->offset($start)->limit($limit)->get()
+        ];
+
+    }
+
     public function delete(int $id)
     {
         if (Item::destroy($id)){

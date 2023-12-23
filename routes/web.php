@@ -42,11 +42,14 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::prefix('/items')->name('items.')->controller(ItemController::class)->group(function(){
         Route::get('/add', 'form')->name('add');
+        Route::get('/api', 'api')->name('api');
+
         Route::get('/edit/{id}', 'form')->name('edit');
 
         Route::post('/store/{id?}', 'store')->name('store');
 
-        Route::delete('/{id}', 'delete')->name('delete');
+
+        Route::delete('/delete/{id}', 'delete')->name('delete');
 
     });
 
