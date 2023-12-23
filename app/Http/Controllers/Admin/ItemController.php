@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -35,13 +36,24 @@ class ItemController extends Controller
             'remarks' => 'nullable|string',
         ]);
 
+        $print_layout = Setting::where('name', 'print_layout')->first()?->value;
+        if (!$print_layout) {
+            return $this->backToForm('Please add a print layout first!', 'error');
+        }
+
         if ($item) {
             $item->update($data);
-            return $this->backToForm('Item updated successfully!');
-        } else {
-            Item::create($data);
-            return $this->backToForm('Item added successfully!');
+            $msg = 'Item updated successfully!';
+
+            $item = Item::create($data);
+            $msg = 'Item added successfully!';
         }
+
+        foreach ($item->getAttributes() as $key => $value) {
+            $print_layout = str_replace("::".strtoupper($key)."::", $value, $print_layout);
+        }
+
+        return $this->backToForm($msg)->with('print_layout', $print_layout);
     }
 
     
@@ -88,8 +100,8 @@ class ItemController extends Controller
     public function infoApi(Request $req, int $id)
     {
         $item = Item::find($id);
-        if (!$item) {
-            return [
+        if (!$item) { 
+            return [  
                 "item" => null
             ];
         }

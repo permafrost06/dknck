@@ -37,4 +37,9 @@
                 </x-button>
         </form>
     </x-cards.card>
+    @if(Session::has("print_layout")) 
+        <script>
+            console.log(`{{Session::get('print_layout')}}`)
+        </script>
+    @endif
 @endsection
