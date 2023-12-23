@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\IndexController;
 use App\Http\Controllers\Admin\ItemController;
 use App\Http\Controllers\Admin\SaleController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,13 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
 
         Route::post('/store/{id?}', 'store')->name('store');
         Route::delete('/delete/{id}', 'delete')->name('delete');
+
+    });
+
+    Route::prefix('/settings')->name('settings.')->controller(SettingController::class)->group(function(){
+        
+        Route::get('/', 'index')->name('index');
+        Route::post('/set', 'store')->name('set');
 
     });
 });
