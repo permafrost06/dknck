@@ -18,8 +18,8 @@
                 @csrf
                 <div class="space-y-4">
 
-                    <x-form.input label="Name" name="name" :value="old('date', $item?->name)" />
-                    <x-form.input label="Vendor" name="vendor" :value="old('date', $item?->vendor)" />
+                    <x-form.input label="Name" name="name" :value="old('name', $item?->name)" />
+                    <x-form.input label="Vendor" name="vendor" :value="old('vendor', $item?->vendor)" />
 
                     <x-form.input type="number" min="0" step="0.01" label="Buying Price (Unit)"
                         name="unit_price_buying" :value="old('unit_price_buying', $item?->unit_price_buying)" />
