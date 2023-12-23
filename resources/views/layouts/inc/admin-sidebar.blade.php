@@ -44,7 +44,7 @@
                 Stock
             </x-sidebar-item>
 
-            <x-sidebar-item route="sales.index" link="#">
+            <x-sidebar-item-group :routes="['sales.add', 'sales.index']">
                 <x-slot:svg viewBox="0 0 48 48">
                     <g fill="none">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
@@ -55,8 +55,32 @@
                         <circle cx="31" cy="26" r="2" fill="currentColor" />
                     </g>
                 </x-slot:svg>
-                Sales
-            </x-sidebar-item>
+                <x-slot:label>
+                    Sales
+                </x-slot:label>
+
+                <x-sidebar-item route="sales.add">
+                    <x-slot:svg viewBox="0 0 20 20">
+                        <path fill="currentColor"
+                            d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 1 1 0-20a10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16z" />
+                    </x-slot:svg>
+                    Add Sale
+                </x-sidebar-item>
+                <x-sidebar-item route="sales.index">
+                    <x-slot:svg viewBox="0 0 48 48">
+                        <g fill="none">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
+                                d="M5 17h38l-4.2 26H9.2zm30 0c0-6.627-4.925-12-11-12s-11 5.373-11 12" />
+                            <circle cx="17" cy="26" r="2" fill="currentColor" />
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
+                                d="M18 33s2 3 6 3s6-3 6-3" />
+                            <circle cx="31" cy="26" r="2" fill="currentColor" />
+                        </g>
+                    </x-slot:svg>
+                    Sales List
+                </x-sidebar-item>
+
+            </x-sidebar-item-group>
 
             <x-sidebar-item route="items.add">
                 <x-slot:svg viewBox="0 0 20 20">

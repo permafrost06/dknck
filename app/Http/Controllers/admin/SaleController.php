@@ -4,43 +4,70 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
+use App\Models\Sale;
 use Illuminate\Http\Request;
 
-class ItemController extends Controller
+class SaleController extends Controller
 {
     public function form(Request $request, string|int $id = '')
     {
-        $item = null;
+        $sale = null;
 
         if (is_numeric($id)) {
-            $item = Item::findOrFail($id);
+            $sale = Sale::findOrFail($id);
         }
 
-        return view('admin.items.form', compact('item'));
+        return view('admin.sales.form', compact('sale'));
     }
 
     public function store(Request $request, int $id = 0)
     {
-        $item = null;
+        $sale = null;
         if ($id) {
-            $item = Item::findOrFail($id);
+            $sale = Sale::findOrFail($id);
         }
 
+
         $data = $request->validate([
-            'name' => 'nullable|string',
-            'vendor' => 'required|string',
-            'unit_price_buying' => 'required|numeric|min:0',
+            'item_id' => 'required|numeric',
             'quantity' => 'required|numeric|min:0',
-            'date' => 'required|date_format:Y-m-d',
-            'remarks' => 'required|string',
+            'sale_price' => 'required|numeric|min:0',
         ]);
 
-        if ($item) {
-            $item->update($data);
-            return $this->backToForm('Item updated successfully!');
+        $item = Item::find($data['item_id']);
+
+
+        if (!$item) {
+            return $this->backToForm('The selected ID is invalid!', 'error');
+        }
+        if ($item->quantity < $data['quantity']) {
+            return $this->backToForm('Not enough quantity!', 'error');
+        }
+
+        
+        if ($sale) {
+
+            if ($sale->item_id != $data['item_id']) {
+                return $this->backToForm('Product id cannot be updated!', 'error');
+            }
+
+            $item->sold += $data['quantity'] - $sale->quantity;
+            $item->quantity -= $data['quantity'];
+            $item->quantity += $sale->quantity;
+
+            $item->profit += ($data['quantity'] - $sale->quantity) * ($data['sale_price'] - $item->unit_price_buying);
+
+            $sale->update($data);
+            $item->save();
+            return $this->backToForm('Sale updated successfully!');
         } else {
-            Item::create($data);
-            return $this->backToForm('Item added successfully!');
+            $item->sold += $data['quantity'];
+            $item->quantity-=$data['quantity'];
+            $item->profit += $data['quantity'] * ($data['sale_price'] - $item->unit_price_buying);
+
+            Sale::create($data);
+            $item->save();
+            return $this->backToForm('Sale added successfully!');
         }
     }
 
@@ -67,7 +94,7 @@ class ItemController extends Controller
 
         $search = $req->get('search', '');
 
-        $q = Item::query();
+        $q = Sale::query();
 
 
         if ($search) {
@@ -85,22 +112,9 @@ class ItemController extends Controller
 
     }
 
-    public function infoApi(Request $req, int $id)
-    {
-        $item = Item::find($id);
-        if (!$item) {
-            return [
-                "item" => null
-            ];
-        }
-        return [
-            "item" => $item
-        ];
-    }
-
     public function delete(int $id)
     {
-        if (Item::destroy($id)){
+        if (Sale::destroy($id)){
             return ['message'=>'Deposit deleted successfully'];
         }
         return response(['message' => 'Unable to delete the deposit!'], 422);

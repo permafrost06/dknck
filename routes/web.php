@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\IndexController;
 use App\Http\Controllers\Admin\ItemController;
+use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,14 +25,26 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [IndexController::class, 'index'])->name('admin.index');
    
     Route::prefix('/items')->name('items.')->controller(ItemController::class)->group(function(){
-        Route::get('/add', 'form')->name('add');
-        Route::get('/api', 'api')->name('api');
-
+        Route::get('/api/info/{id}', 'infoApi')->name('api.info');
         Route::get('/edit/{id}', 'form')->name('edit');
+        
+        Route::get('/api', 'api')->name('api');
+        Route::get('/add', 'form')->name('add');
 
         Route::post('/store/{id?}', 'store')->name('store');
+        Route::delete('/delete/{id}', 'delete')->name('delete');
 
+    });
 
+    Route::prefix('/sales')->name('sales.')->controller(SaleController::class)->group(function(){
+        
+        Route::get('/edit/{id}', 'form')->name('edit');
+        
+        Route::get('/add', 'form')->name('add');
+        Route::get('/api', 'api')->name('api');
+        Route::get('/', 'index')->name('index');
+
+        Route::post('/store/{id?}', 'store')->name('store');
         Route::delete('/delete/{id}', 'delete')->name('delete');
 
     });
