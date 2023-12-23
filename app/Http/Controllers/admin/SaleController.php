@@ -81,14 +81,14 @@ class SaleController extends Controller
         $start = (int) $req->get('start', 0);
         $limit = (int) $req->get('limit', 10);
         $order_by = match ($req->get('order_by')) {
-            // 'name' => 'name',
-            // 'date' => 'date',
-            // 'vendor' => 'vendor',
-            // 'price' => 'unit_price_buying',
-            'sale_price' => 'sale_price',
+            // 'name' => 'items.name',
+            // 'date' => 'items.date',
+            // 'vendor' => 'items.vendor',
+            // 'price' => 'items.unit_price_buying',
+            // 'sold' => 'items.sold',
             'quantity' => 'quantity',
-            // 'sold' => 'sold',
-            // 'profit' => 'profit',
+            'sale_price' => 'sale_price',
+            'profit' => 'items.profit',
             default => 'id'
         };
 
