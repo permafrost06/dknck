@@ -32,7 +32,7 @@ class ItemController extends Controller
             'unit_price_buying' => 'required|numeric|min:0',
             'quantity' => 'required|numeric|min:0',
             'date' => 'required|date_format:Y-m-d',
-            'remarks' => 'required|string',
+            'remarks' => 'nullable|string',
         ]);
 
         if ($item) {

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sold')->default(0);
             $table->unsignedBigInteger('profit')->default(0);
             $table->date('date');
-            $table->text('remarks');
+            $table->text('remarks')->nullable();
 
             $table->timestamps();
         });
