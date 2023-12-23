@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\CustomerController;
 use App\Http\Controllers\admin\IndexController;
+use App\Http\Controllers\admin\ItemController;
 use App\Http\Controllers\admin\PurchaseController;
 use App\Http\Controllers\admin\SalesController;
 use App\Http\Controllers\admin\VendorController;
@@ -37,6 +38,16 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/edit/{id}', 'form')->name('edit');
         Route::post('/store/{id?}', 'store')->name('store');
         Route::delete('/{id}', 'delete')->name('delete');
+    });
+
+    Route::prefix('/items')->name('items.')->controller(ItemController::class)->group(function(){
+        Route::get('/add', 'form')->name('add');
+        Route::get('/edit/{id}', 'form')->name('edit');
+
+        Route::post('/store/{id?}', 'store')->name('store');
+
+        Route::delete('/{id}', 'delete')->name('delete');
+
     });
 
     Route::prefix('/sales')->name('sales.')->controller(SalesController::class)->group(function () {
