@@ -1,0 +1,50 @@
+html, body {
+    min-height: 100%;
+    min-width: 100%;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+    .sortable{
+        position: relative;
+        cursor: pointer;
+    }
+    
+    .sortable::before, .sortable::after{
+        content: '';
+        position: absolute;
+        right: 0;
+        border: 6px solid transparent;
+    }
+    
+    .sortable::before {
+        top: 50%;
+        transform: translateY(calc(-100% - 2px));
+    }
+
+    .sortable::after {
+        bottom: 50%;
+        transform: translateY(calc(100% + 2px));
+    }
+
+    .sortable:hover::before,
+    .sortable.desc::before{
+        border-bottom-color: #a7a7a7;
+    }
+    .sortable:hover::after,
+    .sortable.asc::after{
+        border-top-color: #a7a7a7;
+    }
+    
+    .sortable.asc::before{
+        border-bottom-color: green;
+    }
+    
+    
+    .sortable.desc::after{
+        border-top-color: green;
+    }
+}
