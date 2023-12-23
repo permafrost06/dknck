@@ -36,6 +36,28 @@
                 Dashboard
             </x-sidebar-item>
 
+            <x-sidebar-item route="items.by_vendor" link="#">
+                <x-slot:svg viewBox="0 0 16 16">
+                    <path fill="currentColor"
+                        d="M12.9 2.5C11.3 1.3 11.5 0 11.5 0H2v12.5C2 14.4 4.1 16 6 16h8V3s-.8-.2-1.1-.5M7 6.3c-.9-.3-2.3-.8-2.3-1.9C4.8 3.6 6 3 6 2.8V2h1v.7c1 .1 1.8.4 1.9.4l-.3.9s-.7-.3-1.5-.3c-.7 0-1.1.3-1.2.8c0 .3.5.6 1.3.9c1.5.5 1.9 1.1 1.9 1.9C9.1 8 9 8.9 7 9.1v.9H6v-.8c0-.1-1.4-.5-1.5-.5l.5-.9s1.1.5 2 .4s1.3-.6 1.3-1c.1-.3-.4-.6-1.3-.9m6 8.7H6c-1 0-1.8-.6-2-1.3c-.1-.3 0-.7.4-.7H11V2.7c1 .6 2 1.1 2 1.3z" />
+                </x-slot:svg>
+                Stock
+            </x-sidebar-item>
+
+            <x-sidebar-item route="sales.index" link="#">
+                <x-slot:svg viewBox="0 0 48 48">
+                    <g fill="none">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
+                            d="M5 17h38l-4.2 26H9.2zm30 0c0-6.627-4.925-12-11-12s-11 5.373-11 12" />
+                        <circle cx="17" cy="26" r="2" fill="currentColor" />
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
+                            d="M18 33s2 3 6 3s6-3 6-3" />
+                        <circle cx="31" cy="26" r="2" fill="currentColor" />
+                    </g>
+                </x-slot:svg>
+                Sales
+            </x-sidebar-item>
+
             <x-sidebar-item route="items.add">
                 <x-slot:svg viewBox="0 0 20 20">
                     <path fill="currentColor"
