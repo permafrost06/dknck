@@ -44,19 +44,19 @@ class ItemController extends Controller
         if ($item) {
             $item->update($data);
             $msg = 'Item updated successfully!';
-
+        } else {
             $item = Item::create($data);
             $msg = 'Item added successfully!';
         }
 
         foreach ($item->getAttributes() as $key => $value) {
-            $print_layout = str_replace("::".strtoupper($key)."::", $value, $print_layout);
+            $print_layout = str_replace("::" . strtoupper($key) . "::", $value, $print_layout);
         }
 
         return $this->backToForm($msg)->with('print_layout', $print_layout);
     }
 
-    
+
     public function api(Request $req)
     {
         $start = (int) $req->get('start', 0);
@@ -100,8 +100,8 @@ class ItemController extends Controller
     public function infoApi(Request $req, int $id)
     {
         $item = Item::find($id);
-        if (!$item) { 
-            return [  
+        if (!$item) {
+            return [
                 "item" => null
             ];
         }
@@ -112,8 +112,8 @@ class ItemController extends Controller
 
     public function delete(int $id)
     {
-        if (Item::destroy($id)){
-            return ['message'=>'Deposit deleted successfully'];
+        if (Item::destroy($id)) {
+            return ['message' => 'Deposit deleted successfully'];
         }
         return response(['message' => 'Unable to delete the deposit!'], 422);
     }
