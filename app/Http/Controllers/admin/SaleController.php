@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {
+
+    public function index() {
+        return view('admin.sales.list');
+    }
     public function form(Request $request, string|int $id = '')
     {
         $sale = null;
@@ -77,13 +81,14 @@ class SaleController extends Controller
         $start = (int) $req->get('start', 0);
         $limit = (int) $req->get('limit', 10);
         $order_by = match ($req->get('order_by')) {
-            'name' => 'name',
-            'date' => 'date',
-            'vendor' => 'vendor',
-            'price' => 'unit_price_buying',
+            // 'name' => 'name',
+            // 'date' => 'date',
+            // 'vendor' => 'vendor',
+            // 'price' => 'unit_price_buying',
+            'sale_price' => 'sale_price',
             'quantity' => 'quantity',
-            'sold' => 'sold',
-            'profit' => 'profit',
+            // 'sold' => 'sold',
+            // 'profit' => 'profit',
             default => 'id'
         };
 
@@ -94,12 +99,12 @@ class SaleController extends Controller
 
         $search = $req->get('search', '');
 
-        $q = Sale::query();
+        $q = Sale::with('item');
 
 
         if ($search) {
             $search = '%' . $search . '%';
-            $q->where(function ($q) use ($search) {
+            $q->whereHas('item', function ($q) use ($search) {
                 $q->where('name', 'LIKE', $search);
                 $q->orWhere('vendor', 'LIKE', $search);
             });

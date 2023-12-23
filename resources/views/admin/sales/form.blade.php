@@ -3,7 +3,7 @@
 <script>
     const ITEM_INFO_URL = '{{route("items.api.info", ["id"=>"::ID::"])}}';
 </script>
-@vite(['resources/js/pages/admin/sales.js'])
+@vite(['resources/js/pages/admin/sales-form.js'])
 @endsection
 @section('page')
     <div class="mb-6">

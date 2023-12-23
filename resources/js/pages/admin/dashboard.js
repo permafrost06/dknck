@@ -1,6 +1,9 @@
 import { createApp } from 'vue';
-import Table from '@/views/admin/index/ItemsTable.vue';
+import ItemsTable from '@/views/admin/index/ItemsTable.vue';
+import SalesTable from '@/views/admin/sales/SalesTable.vue';
 
-const app = createApp(Table);
+const itemsApp = createApp(ItemsTable);
+itemsApp.mount('#items-table');
 
-app.mount('#items-table');
+const salesApp = createApp(SalesTable);
+salesApp.mount('#sales-table');
