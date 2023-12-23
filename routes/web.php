@@ -31,6 +31,7 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
         
         Route::get('/api', 'api')->name('api');
         Route::get('/add', 'form')->name('add');
+        Route::get('/stock', 'stock')->name('stock');
 
         Route::post('/store/{id?}', 'store')->name('store');
         Route::delete('/delete/{id}', 'delete')->name('delete');

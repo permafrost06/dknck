@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
+    public function stock(Request $request, string|int $id = '')
+    {
+        return view('admin.items.stock');
+    }
+
     public function form(Request $request, string|int $id = '')
     {
         $item = null;
@@ -88,6 +93,10 @@ class ItemController extends Controller
                 $q->where('name', 'LIKE', $search);
                 $q->orWhere('vendor', 'LIKE', $search);
             });
+        }
+
+        if ($req->get('stock')) {
+            $q->where('quantity', '>', 0);
         }
 
         return [
