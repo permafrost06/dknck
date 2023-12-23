@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('item_id')->index('item');
             $table->unsignedInteger('quantity');
             $table->unsignedInteger('sale_price');
+            $table->date('date');
 
             $table->timestamps();
         });

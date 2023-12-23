@@ -36,6 +36,7 @@ class SaleController extends Controller
             'item_id' => 'required|string',
             'quantity' => 'required|numeric|min:0',
             'sale_price' => 'required|numeric|min:0',
+            'date' => 'required|date_format:Y-m-d',
         ]);
 
         $data['item_id'] = preg_replace('/([^0-9]+)/', '', $data['item_id']);
