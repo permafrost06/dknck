@@ -83,17 +83,28 @@ class SaleController extends Controller
     {
         $start = (int) $req->get('start', 0);
         $limit = (int) $req->get('limit', 10);
-        $order_by = match ($req->get('order_by')) {
-            // 'name' => 'products.name',
-            // 'date' => 'products.date',
-            // 'vendor' => 'products.vendor',
-            // 'price' => 'products.unit_price_buying',
-            // 'sold' => 'products.sold',
+        $order_q = $req->get('order_by', 'id');
+        $order_by = match ($order_q) {
             'quantity' => 'quantity',
             'sale_price' => 'sale_price',
-            'profit' => 'products.profit',
-            default => 'id'
+            'id' => 'id',
+            default => false,
         };
+
+        if (!$order_by) {
+            $order_by = match($order_q) {
+                'name' => 'name',
+                'date' => 'date',
+                'vendor' => 'vendor',
+                'price' => 'unit_price_buying',
+                'sold' => 'sold',
+                default => 'id',
+            };
+            
+            if ($order_by !== 'id') {
+                $order_by = Product::select($order_by)->whereColumn('products.id', 'sales.product_id');
+            }
+        }
 
         $order = 'DESC';
         if ($req->get('order') === 'asc') {
