@@ -4,6 +4,7 @@
         const PRODUCTS_API_LINK = "{{ route('products.api') }}";
         const PRODUCT_EDIT_LINK = "{{ route('products.edit', ['id' => '::ID::']) }}";
         const PRODUCT_DELETE_LINK = "{{ route('products.delete', ['id' => '::ID::']) }}";
+        const PRINT_LAYOUT = `{{ $print_layout }}`;
 
         const CSRF = "{{ csrf_token() }}";
     </script>

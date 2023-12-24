@@ -49,6 +49,21 @@ const showDelete = (product) => {
     toDelete.value = product;
 };
 
+const printLayout = (product) => {
+    if (!PRINT_LAYOUT) {
+        console.error('Please add print layout first!');
+        return;
+    }
+
+    let layout = PRINT_LAYOUT;
+
+    for (const attr in product) {
+        layout = layout.replace(`::${attr.toUpperCase()}::`, product[attr]);
+    }
+
+    console.log(layout);
+};
+
 const onCompleted = (success, res) => {
     deleteUrl.value = null;
     if (success) {
@@ -177,6 +192,14 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
                             @click="() => showDelete(item)"
                         >
                             Delete
+                        </button>
+                        |
+                        <button
+                            type="button"
+                            class="font-medium text-skin-success hover:underline"
+                            @click="() => printLayout(item)"
+                        >
+                            Print
                         </button>
                     </td>
                 </tr>
