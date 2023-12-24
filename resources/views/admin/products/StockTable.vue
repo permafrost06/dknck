@@ -49,6 +49,16 @@ const showDelete = (product) => {
     toDelete.value = product;
 };
 
+const printZpl = (zpl) => {
+    var printWindow = window.open();
+    printWindow.document.open('text/plain');
+    printWindow.document.write(zpl);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+};
+
 const printings = ref([]);
 const printLayout = async (product) => {
     if (printings.value[product.id]) {
@@ -63,7 +73,7 @@ const printLayout = async (product) => {
         console.error(res.error || 'Something went wrong!');
         return;
     }
-    console.log(res.data);
+    printZpl(res.data);
 };
 
 const onCompleted = (success, res) => {
