@@ -42,10 +42,10 @@ class ProductController extends Controller
             'remarks' => 'nullable|string',
         ]);
 
-        // $print_layout = Setting::where('name', 'print_layout')->first()?->value;
-        // if (!$print_layout) {
-        //     return $this->backToForm('Please add a print layout first!', 'error');
-        // }
+        $print_layout = Setting::where('name', 'print_layout')->first()?->value;
+        if (!$print_layout) {
+            return $this->backToForm('Please add a print layout first!', 'error');
+        }
 
         if ($product) {
             $product->update($data);
@@ -55,11 +55,11 @@ class ProductController extends Controller
             $msg = 'Product added successfully!';
         }
 
-        // foreach ($product->getAttributes() as $key => $value) {
-        //     $print_layout = str_replace("::" . strtoupper($key) . "::", $value, $print_layout);
-        // }
+        foreach ($product->getAttributes() as $key => $value) {
+            $print_layout = str_replace("::" . strtoupper($key) . "::", $value, $print_layout);
+        }
 
-        return $this->backToForm($msg);//->with('print_layout', $print_layout);
+        return $this->backToForm($msg)->with('print_layout', $print_layout);
     }
 
 
