@@ -7,10 +7,8 @@ use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
-{
-    public function stock(Request $request, string|int $id = '')
-    {
+class ProductController extends Controller {
+    public function stock(Request $request, string|int $id = '') {
         return view('admin.products.stock');
     }
 
@@ -52,16 +50,7 @@ class ProductController extends Controller
             $msg = 'Product added successfully!';
         }
 
-        foreach ($product->getAttributes() as $key => $value) {
-            if ($key == 'id') {
-                $value = sprintf('DKNCK%08d', '52');
-                $print_layout = str_replace('::ID_HEX::', $this->idToHex($value), $print_layout);
-            }
-            if ($key == 'unit_price_buying') {
-                $value = $this->priceEncode($value);
-            }
-            $print_layout = str_replace("::" . strtoupper($key) . "::", $value, $print_layout);
-        }
+        $print_layout = $this->generateZplCode($product);
 
         return $this->backToForm($msg)->with('print_layout', $print_layout);
     }
@@ -129,9 +118,33 @@ class ProductController extends Controller
         ];
     }
 
-    public function zplCodeApi(Request $req, int $id)
-    {
-        $print_layout = Setting::where('name', 'print_layout')->first()?->value??"";
+    public function generateSingleZplCode($product) {
+        $print_layout = Setting::where('name', 'print_layout')->first()?->value;
+
+        foreach ($product->getAttributes() as $key => $value) {
+            if ($key == 'id') {
+                $value = sprintf('DKNCK%08d', $value);
+                $print_layout = str_replace('::ID_HEX::', $this->idToHex($value), $print_layout);
+            }
+            if ($key == 'unit_price_buying') {
+                $value = $this->priceEncode($value);
+            }
+            $print_layout = str_replace("::" . strtoupper($key) . "::", $value, $print_layout);
+        }
+
+        return $print_layout;
+    }
+
+    public function generateZplCode($product) {
+        $print_layout = '';
+        for ($i = 0; $i < $product->quantity; $i++) {
+            $print_layout .= $this->generateSingleZplCode($product);
+        }
+
+        return $print_layout;
+    }
+
+    public function zplCodeApi(Request $req, int $id) {
         $product = Product::find($id);
         if (!$product) {
             return [
@@ -139,16 +152,15 @@ class ProductController extends Controller
                 "error" => "Invalid product id!"
             ];
         }
-        foreach ($product->getAttributes() as $key => $value) {
-            $print_layout = str_replace("::" . strtoupper($key) . "::", $value, $print_layout);
-        }
+
+        $print_layout = $this->generateZplCode($product);
+
         return [
             "data" => $print_layout
         ];
     }
 
-    public function delete(int $id)
-    {
+    public function delete(int $id) {
         if (Product::destroy($id)) {
             return ['message' => 'Deposit deleted successfully'];
         }
