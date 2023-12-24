@@ -129,12 +129,13 @@ const onCompleted = (success, res) => {
                         Quantity
                     </th>
 
+                    <th scope="col" class="px-6 py-3">Remarks</th>
                     <th scope="col" class="px-6 py-3">Action</th>
                 </tr>
             </thead>
             <tbody v-if="loading">
                 <tr>
-                    <td :colspan="7">
+                    <td :colspan="8">
                         <p class="text-center p-10">Loading...</p>
                     </td>
                 </tr>
@@ -162,6 +163,10 @@ const onCompleted = (success, res) => {
                     </td>
                     <td class="px-6 py-4">{{ sale.sale_price }}</td>
                     <td class="px-6 py-4">{{ sale.quantity }}</td>
+                    <td
+                        class="px-6 py-4"
+                        v-html="highlightText(sale.product.remarks, search)"
+                    ></td>
                     <td class="px-6 py-4">
                         <a
                             :href="editLink(sale)"
@@ -181,7 +186,7 @@ const onCompleted = (success, res) => {
             </tbody>
             <tbody v-else>
                 <tr>
-                    <td :colspan="7">
+                    <td :colspan="8">
                         <p class="p-10 text-center">No sales here!</p>
                     </td>
                 </tr>

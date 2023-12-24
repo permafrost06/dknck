@@ -129,13 +129,13 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
                     >
                         Quantity
                     </th>
-
+                    <th scope="col" class="px-6 py-3">Remarks</th>
                     <th scope="col" class="px-6 py-3">Action</th>
                 </tr>
             </thead>
             <tbody v-if="loading">
                 <tr>
-                    <td :colspan="7">
+                    <td :colspan="8">
                         <p class="text-center p-10">Loading...</p>
                     </td>
                 </tr>
@@ -163,6 +163,7 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
                         {{ item.unit_price_buying }}
                     </td>
                     <td class="px-6 py-4">{{ item.quantity }}</td>
+                    <td class="px-6 py-4" v-html="highlightText(item.remarks, search)"></td>
                     <td class="px-6 py-4">
                         <a
                             :href="editLink(item)"
@@ -182,7 +183,7 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
             </tbody>
             <tbody v-else>
                 <tr>
-                    <td :colspan="7">
+                    <td :colspan="8">
                         <p class="p-10 text-center">No items here!</p>
                     </td>
                 </tr>

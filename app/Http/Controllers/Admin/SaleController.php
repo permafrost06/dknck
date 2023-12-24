@@ -110,6 +110,7 @@ class SaleController extends Controller
             $q->whereHas('product', function ($q) use ($search) {
                 $q->where('name', 'LIKE', $search);
                 $q->orWhere('vendor', 'LIKE', $search);
+                $q->orWhere('remarks', 'LIKE', $search);
             });
         }
 

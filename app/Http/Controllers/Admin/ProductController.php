@@ -92,6 +92,7 @@ class ProductController extends Controller
             $q->where(function ($q) use ($search) {
                 $q->where('name', 'LIKE', $search);
                 $q->orWhere('vendor', 'LIKE', $search);
+                $q->orWhere('remarks', 'LIKE', $search);
             });
         }
 
