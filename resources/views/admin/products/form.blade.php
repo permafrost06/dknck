@@ -37,7 +37,7 @@
 </x-cards.card>
 @if(Session::has("print_layout"))
 <script>
-    // We have to escape & unescape properly here
+    
     const printZpl = (zpl) => {
         var printWindow = window.open();
         printWindow.document.open('text/plain');
@@ -47,7 +47,7 @@
         printWindow.print();
         printWindow.close();
     };
-    printZpl(`{{Session::get('print_layout')}}`)
+    printZpl(`{!!str_replace('`', '\\`', Session::get('print_layout'))!!}`);
 </script>
 @endif
 @endsection

@@ -58,3 +58,26 @@ export const rmClasses = (element, classes) => {
  * @returns {gsap.core.Timeline}
  */
 export const gsapTL = ()=> gsap.timeline();
+
+/**
+ * @param {string} text 
+ * @returns string
+ */
+export const htmlSpecialChars = (text) => {
+    const map = {
+        '&amp;': '&',
+        '&#038;': "&",
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#039;': "'",
+        '&#8217;': "’",
+        '&#8216;': "‘",
+        '&#8211;': "–",
+        '&#8212;': "—",
+        '&#8230;': "…",
+        '&#8221;': '”'
+    };
+
+    return text.replace(/\&[\w\d\#]{2,5}\;/g, (m) => map[m]);
+};
