@@ -1,8 +1,8 @@
 import { find, addClasses, rmClasses } from '../../utils';
 
-const infoEL = find('#item-info');
+const infoEL = find('#product-info');
 
-find('#item-id').addEventListener('keydown', function(evt) {
+find('#product-id').addEventListener('keydown', function(evt) {
     if (evt.key === 'Enter') {
         evt.preventDefault();
         fetchInfo(this.value);
@@ -10,7 +10,7 @@ find('#item-id').addEventListener('keydown', function(evt) {
     }
 });
 
-let itemFetchSignal = null;
+let productFetchSignal = null;
 
 async function fetchInfo(id) {
     id = id.trim();
@@ -21,21 +21,21 @@ async function fetchInfo(id) {
     id = parseInt(id.replace(/([^0-9]+)/, ''));
     rmClasses(infoEL, 'text-skin-success text-skin-danger');
     infoEL.innerHTML = 'Loading...';
-    if (itemFetchSignal) {
-        itemFetchSignal.abort();
-        itemFetchSignal = new AbortController();
+    if (productFetchSignal) {
+        productFetchSignal.abort();
+        productFetchSignal = new AbortController();
     }
-    const res = await (await fetch(ITEM_INFO_URL.replace('::ID::', id))).json();
-    itemFetchSignal = null;
-    if (!res.item) {
-        infoEL.innerHTML = "No item found!";
+    const res = await (await fetch(PRODUCT_INFO_URL.replace('::ID::', id))).json();
+    productFetchSignal = null;
+    if (!res.product) {
+        infoEL.innerHTML = "No product found!";
         addClasses(infoEL, 'text-skin-danger');
         rmClasses(infoEL, 'text-skin-success');
     } else {
-        infoEL.innerHTML = `Name: ${res.item.name}, Price: ${res.item.unit_price_buying}TK`;
+        infoEL.innerHTML = `Name: ${res.product.name}, Price: ${res.product.unit_price_buying}TK`;
         rmClasses(infoEL, 'text-skin-danger');
         addClasses(infoEL, 'text-skin-success');
     }
 }
 
-fetchInfo(find('#item-id').value);
+fetchInfo(find('#product-id').value);

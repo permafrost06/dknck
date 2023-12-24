@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('head')
     <script>
-        const ITEM_INFO_URL = '{{ route('items.api.info', ['id' => '::ID::']) }}';
+        const PRODUCT_INFO_URL = '{{ route('products.api.info', ['id' => '::ID::']) }}';
     </script>
     @vite(['resources/js/pages/admin/sales-form.js'])
 @endsection
@@ -24,10 +24,10 @@
                 @csrf
                 <div class="space-y-4">
 
-                    <x-form.input label="Item ID" :readonly="!!$sale" autocomplete="off" id="item-id" name="item_id"
-                        :value="old('item_id', $sale?->item_id)" />
+                    <x-form.input label="Product ID" :readonly="!!$sale" autocomplete="off" id="product-id" name="product_id"
+                        :value="old('product_id', $sale?->product_id)" />
 
-                    <p class="text-sm italic pl-2 !mt-0" id="item-info"></p>
+                    <p class="text-sm italic pl-2 !mt-0" id="product-info"></p>
 
                     <x-form.input type="number" min="0" step="0.01" label="Sale Price (Unit)" name="sale_price"
                         :value="old('sale_price', $sale?->sale_price)" />

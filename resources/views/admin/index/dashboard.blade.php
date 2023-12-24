@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 @section('head')
     <script>
-        const ITEMS_API_LINK = "{{ route('items.api') }}";
-        const ITEM_EDIT_LINK = "{{ route('items.edit', ['id' => '::ID::']) }}";
-        const ITEM_DELETE_LINK = "{{ route('items.delete', ['id' => '::ID::']) }}";
+        const PRODUCTS_API_LINK = "{{ route('products.api') }}";
+        const PRODUCT_EDIT_LINK = "{{ route('products.edit', ['id' => '::ID::']) }}";
+        const PRODUCT_DELETE_LINK = "{{ route('products.delete', ['id' => '::ID::']) }}";
         
         const SALES_API_LINK = "{{ route('sales.api') }}";
         const SALE_EDIT_LINK = "{{ route('sales.edit', ['id' => '::ID::']) }}";
@@ -21,6 +21,6 @@
         ]" :items="[]" active="" />
     </div>
     <x-cards.card>
-        <div class="px-6 py-3" id="items-table"></div>
+        <div class="px-6 py-3" id="product-table"></div>
     </x-cards.card>
 @endsection

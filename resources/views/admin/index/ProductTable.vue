@@ -25,15 +25,15 @@ const sortBy = (by) => {
 
 const getUrl = ({ page, perPage, search }) => {
     let url =
-        ITEMS_API_LINK + `?start=${(page - 1) * perPage}&limit=${perPage}`;
-    url += `&order_by=${sorted.value.by}&order=${sorted.value.order}&stock=1`;
+        PRODUCTS_API_LINK + `?start=${(page - 1) * perPage}&limit=${perPage}`;
+    url += `&order_by=${sorted.value.by}&order=${sorted.value.order}`;
     if (search) {
         url += `&search=${search}`;
     }
     return url;
 };
 
-const editLink = (item) => ITEM_EDIT_LINK.replace('::ID::', item.id);
+const editLink = (product) => PRODUCT_EDIT_LINK.replace('::ID::', product.id);
 
 const highlightText = (text, highlight) => {
     if (!highlight) {
@@ -44,9 +44,9 @@ const highlightText = (text, highlight) => {
     });
 };
 
-const showDelete = (item) => {
-    deleteUrl.value = ITEM_DELETE_LINK.replace('::ID::', item.id);
-    toDelete.value = item;
+const showDelete = (product) => {
+    deleteUrl.value = PRODUCT_DELETE_LINK.replace('::ID::', product.id);
+    toDelete.value = product;
 };
 
 const onCompleted = (success, res) => {
@@ -103,16 +103,6 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
                         scope="col"
                         class="px-6 py-3 sortable"
                         :class="{
-                            [sorted.order]: sorted.by === 'date',
-                        }"
-                        @click="() => sortBy('date')"
-                    >
-                        Date
-                    </th>
-                    <th
-                        scope="col"
-                        class="px-6 py-3 sortable"
-                        :class="{
                             [sorted.order]: sorted.by === 'price',
                         }"
                         @click="() => sortBy('price')"
@@ -127,7 +117,29 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
                         }"
                         @click="() => sortBy('quantity')"
                     >
-                        Quantity
+                        In Stock
+                    </th>
+
+                    <th
+                        scope="col"
+                        class="px-6 py-3 sortable"
+                        :class="{
+                            [sorted.order]: sorted.by === 'sold',
+                        }"
+                        @click="() => sortBy('sold')"
+                    >
+                        Sold
+                    </th>
+
+                    <th
+                        scope="col"
+                        class="px-6 py-3 sortable"
+                        :class="{
+                            [sorted.order]: sorted.by === 'profit',
+                        }"
+                        @click="() => sortBy('profit')"
+                    >
+                        Profit
                     </th>
 
                     <th scope="col" class="px-6 py-3">Action</th>
@@ -135,7 +147,7 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
             </thead>
             <tbody v-if="loading">
                 <tr>
-                    <td :colspan="7">
+                    <td :colspan="8">
                         <p class="text-center p-10">Loading...</p>
                     </td>
                 </tr>
@@ -158,11 +170,12 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
                         class="px-6 py-4"
                         v-html="highlightText(item.vendor, search)"
                     ></td>
-                    <td class="px-6 py-4">{{ item.date }}</td>
                     <td class="px-6 py-4 font-medium whitespace-nowrap">
                         {{ item.unit_price_buying }}
                     </td>
                     <td class="px-6 py-4">{{ item.quantity }}</td>
+                    <td class="px-6 py-4">{{ item.sold }}</td>
+                    <td class="px-6 py-4">{{ item.profit }}</td>
                     <td class="px-6 py-4">
                         <a
                             :href="editLink(item)"
@@ -182,7 +195,7 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
             </tbody>
             <tbody v-else>
                 <tr>
-                    <td :colspan="7">
+                    <td :colspan="8">
                         <p class="p-10 text-center">No items here!</p>
                     </td>
                 </tr>
@@ -201,7 +214,7 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
         :onCompleted="onCompleted"
     >
         <input type="hidden" name="_token" :value="csrf_token" />
-        Are you sure you want to delete the item?
+        Are you sure you want to delete the product?
     </DeleteModal>
     <AlertModal
         v-else-if="deleteError"
@@ -212,7 +225,7 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
             }
         "
     >
-        Could not delete the item!
+        Could not delete the product!
         <p class="text-sm text-skin-danger">{{ deleteError }}</p>
     </AlertModal>
 </template>

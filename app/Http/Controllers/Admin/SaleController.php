@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Item;
+use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 
@@ -33,47 +33,47 @@ class SaleController extends Controller
 
 
         $data = $request->validate([
-            'item_id' => 'required|string',
+            'product_id' => 'required|string',
             'quantity' => 'required|numeric|min:0',
             'sale_price' => 'required|numeric|min:0',
             'date' => 'required|date_format:Y-m-d',
         ]);
 
-        $data['item_id'] = preg_replace('/([^0-9]+)/', '', $data['item_id']);
+        $data['product_id'] = preg_replace('/([^0-9]+)/', '', $data['product_id']);
 
-        $item = Item::find($data['item_id']);
+        $product = Product::find($data['product_id']);
 
 
-        if (!$item) {
+        if (!$product) {
             return $this->backToForm('The selected ID is invalid!', 'error');
         }
-        if ($item->quantity < $data['quantity']) {
+        if ($product->quantity < $data['quantity']) {
             return $this->backToForm('Not enough quantity!', 'error');
         }
 
         
         if ($sale) {
 
-            if ($sale->item_id != $data['item_id']) {
+            if ($sale->product_id != $data['product_id']) {
                 return $this->backToForm('Product id cannot be updated!', 'error');
             }
 
-            $item->sold += $data['quantity'] - $sale->quantity;
-            $item->quantity -= $data['quantity'];
-            $item->quantity += $sale->quantity;
+            $product->sold += $data['quantity'] - $sale->quantity;
+            $product->quantity -= $data['quantity'];
+            $product->quantity += $sale->quantity;
 
-            $item->profit += ($data['quantity'] - $sale->quantity) * ($data['sale_price'] - $item->unit_price_buying);
+            $product->profit += ($data['quantity'] - $sale->quantity) * ($data['sale_price'] - $product->unit_price_buying);
 
             $sale->update($data);
-            $item->save();
+            $product->save();
             return $this->backToForm('Sale updated successfully!');
         } else {
-            $item->sold += $data['quantity'];
-            $item->quantity-=$data['quantity'];
-            $item->profit += $data['quantity'] * ($data['sale_price'] - $item->unit_price_buying);
+            $product->sold += $data['quantity'];
+            $product->quantity-=$data['quantity'];
+            $product->profit += $data['quantity'] * ($data['sale_price'] - $product->unit_price_buying);
 
             Sale::create($data);
-            $item->save();
+            $product->save();
             return $this->backToForm('Sale added successfully!');
         }
     }
@@ -84,14 +84,14 @@ class SaleController extends Controller
         $start = (int) $req->get('start', 0);
         $limit = (int) $req->get('limit', 10);
         $order_by = match ($req->get('order_by')) {
-            // 'name' => 'items.name',
-            // 'date' => 'items.date',
-            // 'vendor' => 'items.vendor',
-            // 'price' => 'items.unit_price_buying',
-            // 'sold' => 'items.sold',
+            // 'name' => 'products.name',
+            // 'date' => 'products.date',
+            // 'vendor' => 'products.vendor',
+            // 'price' => 'products.unit_price_buying',
+            // 'sold' => 'products.sold',
             'quantity' => 'quantity',
             'sale_price' => 'sale_price',
-            'profit' => 'items.profit',
+            'profit' => 'products.profit',
             default => 'id'
         };
 
@@ -102,12 +102,12 @@ class SaleController extends Controller
 
         $search = $req->get('search', '');
 
-        $q = Sale::with('item');
+        $q = Sale::with('product');
 
 
         if ($search) {
             $search = '%' . $search . '%';
-            $q->whereHas('item', function ($q) use ($search) {
+            $q->whereHas('product', function ($q) use ($search) {
                 $q->where('name', 'LIKE', $search);
                 $q->orWhere('vendor', 'LIKE', $search);
             });

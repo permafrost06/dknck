@@ -3,33 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Item;
+use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 
-class ItemController extends Controller
+class ProductController extends Controller
 {
     public function stock(Request $request, string|int $id = '')
     {
-        return view('admin.items.stock');
+        return view('admin.products.stock');
     }
 
     public function form(Request $request, string|int $id = '')
     {
-        $item = null;
+        $product = null;
 
         if (is_numeric($id)) {
-            $item = Item::findOrFail($id);
+            $product = Product::findOrFail($id);
         }
 
-        return view('admin.items.form', compact('item'));
+        return view('admin.products.form', compact('product'));
     }
 
     public function store(Request $request, int $id = 0)
     {
-        $item = null;
+        $product = null;
         if ($id) {
-            $item = Item::findOrFail($id);
+            $product = Product::findOrFail($id);
         }
 
         $data = $request->validate([
@@ -46,15 +46,15 @@ class ItemController extends Controller
             return $this->backToForm('Please add a print layout first!', 'error');
         }
 
-        if ($item) {
-            $item->update($data);
-            $msg = 'Item updated successfully!';
+        if ($product) {
+            $product->update($data);
+            $msg = 'Product updated successfully!';
         } else {
-            $item = Item::create($data);
-            $msg = 'Item added successfully!';
+            $product = Product::create($data);
+            $msg = 'Product added successfully!';
         }
 
-        foreach ($item->getAttributes() as $key => $value) {
+        foreach ($product->getAttributes() as $key => $value) {
             $print_layout = str_replace("::" . strtoupper($key) . "::", $value, $print_layout);
         }
 
@@ -84,7 +84,7 @@ class ItemController extends Controller
 
         $search = $req->get('search', '');
 
-        $q = Item::query();
+        $q = Product::query();
 
 
         if ($search) {
@@ -108,20 +108,20 @@ class ItemController extends Controller
 
     public function infoApi(Request $req, int $id)
     {
-        $item = Item::find($id);
-        if (!$item) {
+        $product = Product::find($id);
+        if (!$product) {
             return [
-                "item" => null
+                "product" => null
             ];
         }
         return [
-            "item" => $item
+            "product" => $product
         ];
     }
 
     public function delete(int $id)
     {
-        if (Item::destroy($id)) {
+        if (Product::destroy($id)) {
             return ['message' => 'Deposit deleted successfully'];
         }
         return response(['message' => 'Unable to delete the deposit!'], 422);

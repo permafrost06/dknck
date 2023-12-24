@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import StockTable from '@/views/admin/items/StockTable.vue';
+import StockTable from '@/views/admin/products/StockTable.vue';
 
-const itemsApp = createApp(StockTable);
-itemsApp.mount('#items-table');
+const productsApp = createApp(StockTable);
+productsApp.mount('#product-table');

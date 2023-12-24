@@ -151,14 +151,14 @@ const onCompleted = (success, res) => {
                     <th
                         scope="row"
                         class="px-6 py-4 font-medium whitespace-nowrap"
-                        v-html="highlightText(sale.item.name || 'N/A', search)"
+                        v-html="highlightText(sale.product.name || 'N/A', search)"
                     ></th>
                     <td
                         class="px-6 py-4"
-                        v-html="highlightText(sale.item.vendor, search)"
+                        v-html="highlightText(sale.product.vendor, search)"
                     ></td>
                     <td class="px-6 py-4 font-medium whitespace-nowrap">
-                        {{ sale.item.unit_price_buying }}
+                        {{ sale.product.unit_price_buying }}
                     </td>
                     <td class="px-6 py-4">{{ sale.sale_price }}</td>
                     <td class="px-6 py-4">{{ sale.quantity }}</td>

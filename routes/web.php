@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\IndexController;
-use App\Http\Controllers\Admin\ItemController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\HomeController;
@@ -25,7 +25,7 @@ Route::get('/', function () {
 Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [IndexController::class, 'index'])->name('admin.index');
    
-    Route::prefix('/items')->name('items.')->controller(ItemController::class)->group(function(){
+    Route::prefix('/products')->name('products.')->controller(ProductController::class)->group(function(){
         Route::get('/api/info/{id}', 'infoApi')->name('api.info');
         Route::get('/edit/{id}', 'form')->name('edit');
         
