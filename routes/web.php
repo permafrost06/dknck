@@ -27,6 +27,7 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
    
     Route::prefix('/products')->name('products.')->controller(ProductController::class)->group(function(){
         Route::get('/api/info/{id}', 'infoApi')->name('api.info');
+        Route::get('/api/zpl/{id}', 'zplCodeApi')->name('api.zpl');
         Route::get('/edit/{id}', 'form')->name('edit');
         
         Route::get('/api', 'api')->name('api');

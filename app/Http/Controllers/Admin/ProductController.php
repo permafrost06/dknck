@@ -11,8 +11,7 @@ class ProductController extends Controller
 {
     public function stock(Request $request, string|int $id = '')
     {
-        $print_layout = Setting::where('name', 'print_layout')->first()?->value;
-        return view('admin.products.stock', compact('print_layout'));
+        return view('admin.products.stock');
     }
 
     public function form(Request $request, string|int $id = '')
@@ -118,6 +117,24 @@ class ProductController extends Controller
         }
         return [
             "product" => $product
+        ];
+    }
+
+    public function zplCodeApi(Request $req, int $id)
+    {
+        $print_layout = Setting::where('name', 'print_layout')->first()?->value??"";
+        $product = Product::find($id);
+        if (!$product) {
+            return [
+                "data" => null,
+                "error" => "Invalid product id!"
+            ];
+        }
+        foreach ($product->getAttributes() as $key => $value) {
+            $print_layout = str_replace("::" . strtoupper($key) . "::", $value, $print_layout);
+        }
+        return [
+            "data" => $print_layout
         ];
     }
 

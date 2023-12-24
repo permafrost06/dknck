@@ -39,6 +39,7 @@
     </x-cards.card>
     @if(Session::has("print_layout")) 
         <script>
+            // We have to escape & unescape properly here
             console.log(`{{Session::get('print_layout')}}`)
         </script>
     @endif

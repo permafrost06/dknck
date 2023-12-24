@@ -49,19 +49,21 @@ const showDelete = (product) => {
     toDelete.value = product;
 };
 
-const printLayout = (product) => {
-    if (!PRINT_LAYOUT) {
-        console.error('Please add print layout first!');
+const printings = ref([]);
+const printLayout = async (product) => {
+    if (printings.value[product.id]) {
         return;
     }
-
-    let layout = PRINT_LAYOUT;
-
-    for (const attr in product) {
-        layout = layout.replace(`::${attr.toUpperCase()}::`, product[attr]);
+    printings.value[product.id] = true;
+    const res = await (
+        await fetch(ZPL_API_LINK.replace('::ID::', product.id))
+    ).json();
+    printings.value[product.id] = false;
+    if (!res.data) {
+        console.error(res.error || 'Something went wrong!');
+        return;
     }
-
-    console.log(layout);
+    console.log(res.data);
 };
 
 const onCompleted = (success, res) => {
@@ -178,7 +180,10 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
                         {{ item.unit_price_buying }}
                     </td>
                     <td class="px-6 py-4">{{ item.quantity }}</td>
-                    <td class="px-6 py-4" v-html="highlightText(item.remarks, search)"></td>
+                    <td
+                        class="px-6 py-4"
+                        v-html="highlightText(item.remarks, search)"
+                    ></td>
                     <td class="px-6 py-4">
                         <a
                             :href="editLink(item)"
@@ -199,7 +204,7 @@ const toIdFormat = (id) => `DKNCK${id.toString().padStart(8, 0)}`;
                             class="font-medium text-skin-success hover:underline"
                             @click="() => printLayout(item)"
                         >
-                            Print
+                            {{ printings[item.id] ? '...' : 'Print' }}
                         </button>
                     </td>
                 </tr>
