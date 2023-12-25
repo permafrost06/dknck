@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\Setting;
+use App\Utils\ZplUtils;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller {
@@ -37,11 +37,7 @@ class ProductController extends Controller {
             'remarks' => 'nullable|string',
         ]);
 
-        $print_layout = Setting::where('name', 'print_layout')->first()?->value;
-        if (!$print_layout) {
-            return $this->backToForm('Please add a print layout first!', 'error');
-        }
-
+        
         if ($product) {
             $product->update($data);
             $msg = 'Product updated successfully!';
@@ -50,18 +46,17 @@ class ProductController extends Controller {
             $msg = 'Product added successfully!';
         }
 
-        $print_layout = $this->generateZplCode($product);
+        if ($request->has('print')) {
+            $zplCode = ZplUtils::generateZplCode($product);
+            if (!$zplCode) {
+                return $this->backToForm('Please add a print layout first!', 'error');
+            }
+            return $this->backToForm($msg)->with('zpl-code', $zplCode);
+        }
+        return $this->backToForm($msg);
 
-        return $this->backToForm($msg)->with('print_layout', $print_layout);
     }
 
-    public function idToHex($id) {
-        return 'DKNCK>5' . explode('DKNCK', $id)[1];
-    }
-
-    public function priceEncode($price) {
-        return rand(100, 999) . $price * 2;
-    }
 
     public function api(Request $req) {
         $start = (int) $req->get('start', 0);
@@ -118,47 +113,6 @@ class ProductController extends Controller {
         ];
     }
 
-    public function generateSingleZplCode($product) {
-        $print_layout = Setting::where('name', 'print_layout')->first()?->value;
-
-        foreach ($product->getAttributes() as $key => $value) {
-            if ($key == 'id') {
-                $value = sprintf('DKNCK%08d', $value);
-                $print_layout = str_replace('::ID_HEX::', $this->idToHex($value), $print_layout);
-            }
-            if ($key == 'unit_price_buying') {
-                $value = $this->priceEncode($value);
-            }
-            $print_layout = str_replace("::" . strtoupper($key) . "::", $value, $print_layout);
-        }
-
-        return $print_layout;
-    }
-
-    public function generateZplCode($product) {
-        $print_layout = '';
-        for ($i = 0; $i < $product->quantity; $i++) {
-            $print_layout .= $this->generateSingleZplCode($product);
-        }
-
-        return $print_layout;
-    }
-
-    public function zplCodeApi(Request $req, int $id) {
-        $product = Product::find($id);
-        if (!$product) {
-            return [
-                "data" => null,
-                "error" => "Invalid product id!"
-            ];
-        }
-
-        $print_layout = $this->generateZplCode($product);
-
-        return [
-            "data" => $print_layout
-        ];
-    }
 
     public function delete(int $id) {
         if (Product::destroy($id)) {
