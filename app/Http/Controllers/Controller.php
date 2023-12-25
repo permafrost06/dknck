@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -12,7 +13,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 
-    public function backToForm(string $message, string $alertType = 'success')
+    public function backToForm(string $message, string $alertType = 'success') : RedirectResponse | array
     {
         if(request()->expectsJson()){
             return compact('message', 'type');
@@ -20,7 +21,7 @@ class Controller extends BaseController
         return redirect()->back()->with('form-alert', $message)->with('form-alert-type', $alertType);
     }
 
-    public function redirectToForm(string $route, array $params, string $message, string $alertType = 'success')
+    public function redirectToForm(string $route, array $params, string $message, string $alertType = 'success') : RedirectResponse
     {
         return redirect()->route($route, $params)->with('form-alert', $message)->with('form-alert-type', $alertType);
     }
