@@ -5,9 +5,7 @@ use App\Models\Product;
 use App\Models\Setting;
 
 class ZplUtils {
-    public static function generateSingleZplCode(Product $product) {
-        $print_layout = Setting::where('name', 'print_layout')->first()?->value;
-
+    private static function generateSingleZplCode(Product $product, string $print_layout) {
         foreach ($product->getAttributes() as $key => $value) {
             if ($key == 'id') {
                 $value = sprintf('DKNCK%08d', $value);
@@ -22,13 +20,17 @@ class ZplUtils {
         return $print_layout;
     }
 
-    public static function generateZplCode(Product $product) {
-        $print_layout = '';
+    public static function generateZplCode(Product $product): ?string {
+        $print_layout = Setting::where('name', 'print_layout')->first()?->value;
+        if (!$print_layout) {
+            return null;
+        }
+        $zpl_code = '';
         for ($i = 0; $i < $product->quantity; $i++) {
-            $print_layout .= self::generateSingleZplCode($product);
+            $zpl_code .= self::generateSingleZplCode($product, $print_layout);
         }
 
-        return $print_layout;
+        return $zpl_code;
     }
 
     public static function idToHex($id) {

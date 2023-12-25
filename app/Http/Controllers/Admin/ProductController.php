@@ -38,11 +38,7 @@ class ProductController extends Controller {
             'remarks' => 'nullable|string',
         ]);
 
-        $print_layout = Setting::where('name', 'print_layout')->first()?->value;
-        if (!$print_layout) {
-            return $this->backToForm('Please add a print layout first!', 'error');
-        }
-
+        
         if ($product) {
             $product->update($data);
             $msg = 'Product updated successfully!';
@@ -51,9 +47,15 @@ class ProductController extends Controller {
             $msg = 'Product added successfully!';
         }
 
-        $print_layout = ZplUtils::generateZplCode($product);
+        if ($request->has('print')) {
+            $zplCode = ZplUtils::generateZplCode($product);
+            if (!$zplCode) {
+                return $this->backToForm('Please add a print layout first!', 'error');
+            }
+            return $this->backToForm($msg)->with('zpl-code', $zplCode);
+        }
+        return $this->backToForm($msg);
 
-        return $this->backToForm($msg)->with('print_layout', $print_layout);
     }
 
 
