@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('head')
     <script>
-        const ZPL_API_LINK = "{{ route('products.api.zpl', ['id'=>'::ID::']) }}";
+        const ZPL_API_LINK = "{{ route('zpl.get', ['id'=>'::ID::']) }}";
         const PRODUCTS_API_LINK = "{{ route('products.api') }}";
         const PRODUCT_EDIT_LINK = "{{ route('products.edit', ['id' => '::ID::']) }}";
         const PRODUCT_DELETE_LINK = "{{ route('products.delete', ['id' => '::ID::']) }}";

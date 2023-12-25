@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\IndexController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ZplCodeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +28,6 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
    
     Route::prefix('/products')->name('products.')->controller(ProductController::class)->group(function(){
         Route::get('/api/info/{id}', 'infoApi')->name('api.info');
-        Route::get('/api/zpl/{id}', 'zplCodeApi')->name('api.zpl');
         Route::get('/edit/{id}', 'form')->name('edit');
         
         Route::get('/api', 'api')->name('api');
@@ -38,6 +38,17 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(function () {
         Route::delete('/delete/{id}', 'delete')->name('delete');
 
     });
+
+
+    Route::prefix('/zpl-code')->name('zpl.')->controller(ZplCodeController::class)->group(function(){
+        
+        Route::get('/printer', 'form')->name('form');
+        Route::get('/{id}', 'generate')->name('get');
+
+        Route::post('/static', 'generateStatic')->name('static');
+
+    });
+
 
     Route::prefix('/sales')->name('sales.')->controller(SaleController::class)->group(function(){
         
